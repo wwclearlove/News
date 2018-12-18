@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
  */
 
 public class TestUtills {
+
     /**
      * @param regex
      *正则表达式的字符串
@@ -28,7 +29,7 @@ public class TestUtills {
      * @return 返回电话是否正确 如果正确匹配 则返回true 否则返回false
      */
     public static boolean IsHandset(String str){
-        String regex = "^[1]+[3,5]+\\d{9}$";
+        String regex = "^[1]+[3,8]+\\d{9}$";
         return match(regex,str);
     }
 
