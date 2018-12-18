@@ -2,4 +2,5 @@
     <string name="app_name">News</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="mima"><u>忘记密码？</u></string>
+    <string name="title_activity_registered_">Registered_Activity</string>
 </resources>
