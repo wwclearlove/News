@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cdictv.news.R;
-import cdictv.news.util.GlideImageLoader;
+import cdictv.news.Utils.GlideImageLoader;
 
 public class MainActivity extends AppCompatActivity {
 

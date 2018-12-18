@@ -1,4 +1,4 @@
-package cdictv.news.util;
+package cdictv.news.Utils;
 
 import android.content.Context;
 import android.widget.ImageView;
