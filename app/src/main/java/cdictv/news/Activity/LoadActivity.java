@@ -1,6 +1,5 @@
 package cdictv.news.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
@@ -41,8 +40,8 @@ public class LoadActivity extends AppCompatActivity {
             @Override
             public void onClickEnterOrSkip() {
                  Toast.makeText(getApplicationContext(),"跳过去了",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(LoadActivity.this,LoginActivity.class));
-                finish();
+              //  startActivity(new Intent(GuideActivity.this, MainActivity.class));
+//                finish();
             }
         });
     }
