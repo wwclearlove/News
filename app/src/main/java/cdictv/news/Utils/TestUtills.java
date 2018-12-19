@@ -56,7 +56,7 @@ public class TestUtills {
      * @return
      */
     public static boolean IsUserId(String str){
-        String regex = "^[a-z]\\w{4,10}$";
+        String regex = "^[a-zA-Z]\\w{4,10}$";
         return match(regex,str);
     }
 }
