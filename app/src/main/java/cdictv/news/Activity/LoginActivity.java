@@ -67,8 +67,8 @@ public class LoginActivity extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_login:
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 checkOut();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 break;
             case R.id.bt_resgis:
                 startActivity(new Intent(LoginActivity.this, RegisteredActivity.class));

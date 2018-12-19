@@ -1,6 +1,5 @@
 package cdictv.news.Activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cdictv.news.JavaBean.UserInfo;
 import cdictv.news.R;
-import cdictv.news.Utils.DBManager;
 import cdictv.news.Utils.TestUtills;
 
 public class RegisteredActivity extends AppCompatActivity {
@@ -90,18 +88,19 @@ public class RegisteredActivity extends AppCompatActivity {
                                 if (!pawone.equals(pawtwo)) {
                                     Toast.makeText(this, "密码两次输入不一致", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    if(!TestUtills.IsCodeNmb(yzm)){
-                                        Toast.makeText(this, "验证码输入为4位数", Toast.LENGTH_SHORT);
+//                                    if(!TestUtills.IsCodeNmb(yzm)){
+//                                        Toast.makeText(this, "验证码输入为4位数", Toast.LENGTH_SHORT);
+//                                    }else {
+//
+//                                    }
+                                    user.setName(username);
+                                    user.setPassword(pawtwo);
+                                    user.setPhone(phone);
+                                    if(user.save()){
+                                        Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(RegisteredActivity.this,LoginActivity.class));
                                     }else {
-                                        user.setName(username);
-                                        user.setPassword(pawtwo);
-                                        user.setPhone(phone);
-                                        if(user.save()){
-                                            Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(RegisteredActivity.this,LoginActivity.class));
-                                        }else {
-                                            Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
-                                        }
+                                        Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
