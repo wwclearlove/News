@@ -130,7 +130,7 @@ public class RegisteredActivity extends AppCompatActivity {
 
     private void initCode() {
         final String phone = regPhone.getText().toString();
-        if(phone.isEmpty()){
+        if(!phone.isEmpty()){
             //获取随机数生成验证码
             code = new String();
             for (int i = 0; i < 4; i++) {
