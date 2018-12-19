@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -40,9 +41,11 @@ public class LoginActivity extends Activity {
     @InjectView(R.id.login_wagnji)
     TextView loginWagnji;
 
-    private boolean falg = true;
+
     private List<UserInfo> userId;
     private UserInfo userInfo;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -50,6 +53,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initDBManger();
+        initMiMa();
         userInfo = new UserInfo();
         ButterKnife.inject(this);
     }
@@ -63,7 +67,7 @@ public class LoginActivity extends Activity {
         dbManager.closeDatabase();
     }
 
-    @OnClick({R.id.bt_login, R.id.bt_resgis, R.id.img_touxian,R.id.login_mima,R.id.login_wagnji})
+    @OnClick({R.id.bt_login, R.id.bt_resgis, R.id.img_touxian,R.id.login_wagnji})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_login:
@@ -76,47 +80,59 @@ public class LoginActivity extends Activity {
                 break;
             case R.id.img_touxian:
                 break;
-            case R.id.login_mima:
-                break;
             case R.id.login_wagnji:
                 break;
         }
     }
 
+
+    /**
+     * 通过loginMima.isChecked()的点击开启时
+     * 来对SharedPreferences里写上数据
+     * @param username
+     * @param paw
+     */
     private void initJiZhuMiMa(String username,String paw) {
-        SharedPreferences.Editor editor = getSharedPreferences("mimadate",MODE_PRIVATE).edit();
-        if(!falg){
+        editor = getSharedPreferences("mimadate",MODE_PRIVATE).edit();
+        if(loginMima.isChecked()){
             editor.putString("username",username);
             editor.putString("paw",paw);
+            editor.putBoolean("falg",true);
+            editor.apply();
         }else {
-            SharedPreferences sp = getSharedPreferences("mimadate",MODE_PRIVATE);
-            loginUser.setText(sp.getString("username",""));
-            loginPassword.setText(sp.getString("paw",""));
+            //editor.clear();
+//            editor.putString("username","");
+//            editor.putString("paw","");
+            editor.putBoolean("falg",false);
+            editor.apply();
         }
-
     }
 
     /**
      * 验证输入 用户名 密码 是否规范
      */
     private void checkOut() {
+        //Log.i("userlog", "initMiMa: "+loginUser);
         String username = loginUser.getText().toString().trim();
         String paw = loginPassword.getText().toString();
-        if (username.equals("")) {
+        if (username.isEmpty()) {
             Toast.makeText(LoginActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
         } else {
-            if (paw.equals("")) {
+            if (paw.isEmpty()) {
                 Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
             } else {
-                if (!TestUtills.IsUserId(username)) {
+                if(TestUtills.IsHandset(username)){
+                    selectLog(username,paw);
+                }else if (!TestUtills.IsUserId(username)) {
                     Toast.makeText(LoginActivity.this, "用户名请以字母开头", Toast.LENGTH_SHORT).show();
-                }
-                if (!TestUtills.IsPassword(paw)) {
+                }else if (!TestUtills.IsPassword(paw)) {
                     Toast.makeText(LoginActivity.this, "请输入6-11位密码", Toast.LENGTH_SHORT).show();
+                }else {
+                    selectLog(username,paw);
                 }
             }
         }
-        selectLog(username, paw);
+
     }
 
     /**
@@ -137,17 +153,28 @@ public class LoginActivity extends Activity {
 
         if (userId != null) {
             if (userId.get(0).getPassword().equals(paw)) {
-                if(loginMima.isChecked()){
-                    initJiZhuMiMa(username,paw);
-                }
-
-                //转跳到新闻界面
-
+                initJiZhuMiMa(username,paw);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             } else {
-                Toast.makeText(LoginActivity.this, "密码输入错误", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "密码或用户名输入错误", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(LoginActivity.this, "用户不存在", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void initMiMa() {
+        loginUser = findViewById(R.id.login_user);
+        loginPassword = findViewById(R.id.login_password);
+        loginMima = findViewById(R.id.login_mima);
+        sp = getSharedPreferences("mimadate",MODE_PRIVATE);
+        String userlog = sp.getString("username","");
+        String pawlog = sp.getString("paw","");
+        boolean falg  = sp.getBoolean("falg",false);
+        if(falg){
+            loginUser.setText(userlog);
+            loginPassword.setText(pawlog);
+            loginMima.setChecked(falg);
         }
     }
 }

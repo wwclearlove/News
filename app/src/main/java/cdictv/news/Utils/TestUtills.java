@@ -29,7 +29,7 @@ public class TestUtills {
      * @return 返回电话是否正确 如果正确匹配 则返回true 否则返回false
      */
     public static boolean IsHandset(String str){
-        String regex = "^[1]+[3,8]+\\d{9}$";
+        String regex = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$";
         return match(regex,str);
     }
 
@@ -58,6 +58,18 @@ public class TestUtills {
     public static boolean IsUserId(String str){
         String regex = "^[a-zA-Z]\\w{4,10}$";
         return match(regex,str);
+    }
+
+    /**
+     * 设置数值装换为时间
+     * @param l 转换的时间
+     * @return 剩余的秒数
+     */
+    public static String formatLongToTimeStr(Long l) {
+        int second = 0;
+        second = l.intValue();
+        String strtime = "剩余"+ second + "秒";
+        return strtime;
     }
 }
 

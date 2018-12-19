@@ -1,13 +1,18 @@
 package cdictv.news.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -16,6 +21,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cdictv.news.JavaBean.UserInfo;
 import cdictv.news.R;
+import cdictv.news.Utils.DBManager;
 import cdictv.news.Utils.TestUtills;
 
 public class RegisteredActivity extends AppCompatActivity {
@@ -37,7 +43,27 @@ public class RegisteredActivity extends AppCompatActivity {
     @InjectView(R.id.reg_exit)
     TextView regExit;
 
-    List<UserInfo> userInfos;
+    private List<UserInfo> userInfos;
+    private Thread thread;
+    //private long timenum = 3;
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @SuppressLint("ResourceAsColor")
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    regCode.setBackgroundResource(R.drawable.regis_but);
+                   // regCode.setBackgroundColor(R.color.colorPrimaryDark);
+                    handler.removeCallbacks(thread);
+                    Log.i("TAG", "handleMessage: "+thread);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +87,10 @@ public class RegisteredActivity extends AppCompatActivity {
         String pawtwo = regPawTwo.getText().toString();
         String yzm = regYzm.getText().toString();
 
-        if(username.equals("")){
+        if(username.isEmpty()){
             Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
         }else {
-            if(pawone.equals("")|| pawtwo.equals("")){
+            if(pawone.isEmpty()|| pawtwo.isEmpty()){
                 Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
             }else {
                 if(phone.equals("")){
@@ -93,15 +119,22 @@ public class RegisteredActivity extends AppCompatActivity {
 //                                    }else {
 //
 //                                    }
-                                    user.setName(username);
-                                    user.setPassword(pawtwo);
-                                    user.setPhone(phone);
-                                    if(user.save()){
-                                        Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(RegisteredActivity.this,LoginActivity.class));
+                                    List<UserInfo> infoList =  DataSupport.where("phone=?", phone).find(UserInfo.class);
+                                     String phoneone = infoList.get(0).getPhone();
+                                    if(!phoneone.equals(phone)){
+                                        user.setName(username);
+                                        user.setPassword(pawtwo);
+                                        user.setPhone(phone);
+                                        if(user.save()){
+                                            Toast.makeText(this, "注册成功！", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(RegisteredActivity.this,LoginActivity.class));
+                                        }else {
+                                            Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
+                                        }
                                     }else {
-                                        Toast.makeText(this, "注册失败！", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, "电话号码已被注册", Toast.LENGTH_SHORT).show();
                                     }
+
 
                                 }
                             }
@@ -118,6 +151,8 @@ public class RegisteredActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.reg_code:
+                initCode();
+//                thread.start();
                 break;
             case R.id.reg_okbt:
                 registerInfo();
@@ -127,6 +162,38 @@ public class RegisteredActivity extends AppCompatActivity {
                 finish();
                 break;
         }
+    }
+
+    private void initCode() {
+
+
+
+
+      thread = new Thread(new Runnable() {
+          long timenum = 10;
+          @SuppressLint("ResourceAsColor")
+            @Override
+            public void run() {
+                timenum--;
+                synchronized (this){
+                    if(timenum>0){
+                        regCode.setBackgroundColor(R.color.lin);
+                        regCode.setText(TestUtills.formatLongToTimeStr(timenum));
+                        regCode.setClickable(false);
+                        handler.postDelayed(this,1000);
+                    }else {
+                        Log.i("thread", "run: 11111111111111111111111");
+                        regCode.setClickable(true);
+                        regCode.setText("再次获取");
+                        Message message = new Message();
+                        message.what=1;
+                        handler.sendMessage(message);
+
+                    }
+                }
+            }
+        });
+      handler.post(thread);
     }
 
 
