@@ -72,13 +72,14 @@ public class LoginActivity extends Activity {
         switch (view.getId()) {
             case R.id.bt_login:
                 checkOut();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
                 break;
             case R.id.bt_resgis:
                 startActivity(new Intent(LoginActivity.this, RegisteredActivity.class));
                 finish();
                 break;
             case R.id.img_touxian:
+
                 break;
             case R.id.login_wagnji:
                 break;
@@ -94,15 +95,13 @@ public class LoginActivity extends Activity {
      */
     private void initJiZhuMiMa(String username,String paw) {
         editor = getSharedPreferences("mimadate",MODE_PRIVATE).edit();
+        //如果勾选CheckBox的选项 把数据写入SharedPreferences中 没有则在SharedPreferences的Boolean中写入false中
         if(loginMima.isChecked()){
             editor.putString("username",username);
             editor.putString("paw",paw);
             editor.putBoolean("falg",true);
             editor.apply();
         }else {
-            //editor.clear();
-//            editor.putString("username","");
-//            editor.putString("paw","");
             editor.putBoolean("falg",false);
             editor.apply();
         }
@@ -122,7 +121,11 @@ public class LoginActivity extends Activity {
                 Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
             } else {
                 if(TestUtills.IsHandset(username)){
-                    selectLog(username,paw);
+                    if(TestUtills.IsPassword(paw)){
+                        selectLog(username,paw);
+                    }else {
+                        Toast.makeText(LoginActivity.this, "请输入6-11位密码", Toast.LENGTH_SHORT).show();
+                    }
                 }else if (!TestUtills.IsUserId(username)) {
                     Toast.makeText(LoginActivity.this, "用户名请以字母开头", Toast.LENGTH_SHORT).show();
                 }else if (!TestUtills.IsPassword(paw)) {
@@ -150,8 +153,7 @@ public class LoginActivity extends Activity {
         } else {
             userId = DataSupport.where("name=?", username).find(UserInfo.class);
         }
-
-        if (userId != null) {
+        if (!userId.isEmpty()) {
             if (userId.get(0).getPassword().equals(paw)) {
                 initJiZhuMiMa(username,paw);
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -168,9 +170,12 @@ public class LoginActivity extends Activity {
         loginPassword = findViewById(R.id.login_password);
         loginMima = findViewById(R.id.login_mima);
         sp = getSharedPreferences("mimadate",MODE_PRIVATE);
+
         String userlog = sp.getString("username","");
         String pawlog = sp.getString("paw","");
         boolean falg  = sp.getBoolean("falg",false);
+
+        //通过读取SharedPreferences里面的数据来判断是否勾选CheckBox的选项 来设置数据
         if(falg){
             loginUser.setText(userlog);
             loginPassword.setText(pawlog);
