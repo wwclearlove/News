@@ -2,6 +2,7 @@ package cdictv.news.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,9 +19,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +35,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cdictv.news.Been.FragmentBeen;
+import cdictv.news.JavaBean.User;
 import cdictv.news.R;
 import cdictv.news.Utils.saveUtil;
 import cdictv.news.fragment.MyFragment;
@@ -44,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     TabLayout mTablayout;
     @InjectView(R.id.viewPager)
     ViewPager mViewPager;
+
+
+    private cdictv.news.JavaBean.User userinfo;
     private boolean isExit;
     private int tag=0;
     //双击退出的 handler
@@ -55,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             isExit = true;
         }
     };
+    private ImageView HeaderImageView;
+    private TextView UserNameText;
 
     @Override
     public void onBackPressed() {
@@ -140,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mMNavifationVion.setItemIconTintList(null);
+        View headerView = mMNavifationVion.getHeaderView(0);
+        initIntentDate(headerView);
         mMNavifationVion.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -160,12 +177,49 @@ public class MainActivity extends AppCompatActivity {
                         Intent tent=new Intent(MainActivity.this,VidvoActivity.class);
                         startActivity(tent);
                         break;
-                        default:
+                    case "我的设置":
+                        Intent setintent =new Intent(MainActivity.this,SettingUserActivity.class);
+                        setintent.putExtra("data_user",userinfo);
+                        startActivity(setintent);
+                        break;
+                    case "关于我们":
+//                        Intent setintent =new Intent(MainActivity.this,SettingUserActivity.class);
+//                        setintent.putExtra("data_user",userinfo);
+//                        startActivity(setintent);
+                        break;
+                    default:
                 }
 //                Toast.makeText(MainActivity.this, (item.getItemId() + "--" + item.getTitle().toString()), Toast.LENGTH_LONG).show();
                 return true;
             }
         });
+
+    }
+
+    /**
+     * 设置数据的在侧边栏显示
+     * @param headerView
+     */
+
+    private void initIntentDate(View headerView) {
+        UserNameText = headerView.findViewById(R.id.userNameText);
+        HeaderImageView = headerView.findViewById(R.id.headerImageView);
+
+        userinfo = (User) getIntent().getSerializableExtra("data_user");
+        if(userinfo != null){
+            Glide.with(MainActivity.this).load(userinfo.getPhoto()).asBitmap().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(new BitmapImageViewTarget(HeaderImageView) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(MainActivity.this.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            HeaderImageView.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+            String username = userinfo.getName();
+            UserNameText.setText("用户"+username);
+        }
 
     }
 

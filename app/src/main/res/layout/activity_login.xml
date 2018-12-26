@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/img_touxian"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/hader_shape"
                 android:adjustViewBounds="true"
                 android:gravity="center"
                 android:layout_width="90dp"

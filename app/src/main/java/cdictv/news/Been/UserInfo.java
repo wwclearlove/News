@@ -9,9 +9,15 @@ public class UserInfo extends DataSupport{
     private String phone;
     //性别
     private String gender;
+    private byte[] headimg;
 
+    public byte[] getHeadimg() {
+        return headimg;
+    }
 
-
+    public void setHeadimg(byte[] headimg) {
+        this.headimg = headimg;
+    }
 
     public String getName() {
         return name;

@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "cdictv.news"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,17 +22,20 @@ android {
         }
     }
 }
+
 repositories {
     maven {
         url "https://jitpack.io"
     }
 }
+
+
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:design:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -42,12 +45,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'org.litepal.android:core:1.6.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-16'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-16'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 
@@ -60,4 +61,14 @@ dependencies {
     // 导入腾讯云直播 SDK aar
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
+
+    //引入网络登录的数据
+    implementation files('src/main/java/Libs/bolts-tasks-1.4.0.jar')
+    implementation files('src/main/java/Libs/cos-android-sdk-5.4.18.jar')
+    implementation files('src/main/java/Libs/mid-sdk-4.06.jar')
+    implementation files('src/main/java/Libs/mta-android-sdk-3.4.7.jar')
+    implementation files('src/main/java/Libs/okio-1.13.0.jar')
+    implementation files('src/main/java/Libs/qcloud-foundation-1.5.5.jar')
+    implementation files('src/main/java/Libs/okhttp-3.9.0.jar')
+    //
 }

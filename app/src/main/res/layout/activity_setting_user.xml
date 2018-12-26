@@ -2,28 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.RegisteredActivity">
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:background="#10090a"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:layout_height="40dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="用户注册"
-            android:textSize="20dp"
-
-            android:textColor="#fffefe"
-            />
-    </LinearLayout>
+    android:orientation="vertical"
+    tools:context=".Activity.SettingUserActivity">
 
     <LinearLayout
         android:layout_marginLeft="10dp"
@@ -35,12 +17,17 @@
         <LinearLayout
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:orientation="horizontal">
-
+            android:layout_height="200dp"
+            android:orientation="vertical">
+            <TextView
+                android:text="设     置"
+                android:textSize="50dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
             <ImageView
                 android:layout_marginTop="5dp"
-                android:id="@+id/reg_touxian"
+                android:id="@+id/set_touxian"
                 android:background="@drawable/hader_shape"
                 android:adjustViewBounds="true"
                 android:gravity="center"
@@ -65,16 +52,18 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_user" />
 
-            <EditText
-                android:id="@+id/reg_user"
+            <TextView
+                android:id="@+id/set_user"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="用户名"
+                android:text="用户名"
+                android:textSize="35dp"
                 android:textColor="#747272" />
         </LinearLayout>
+
         <LinearLayout
             android:background="@drawable/login_lin"
             android:orientation="horizontal"
@@ -89,63 +78,17 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center"
                 />
-            <EditText
-                android:hint="手机号"
-                android:textColor="#747272"
-                android:id="@+id/reg_phone"
-                android:layout_gravity="center"
+            <TextView
+                android:id="@+id/set_phone"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="60dp"
-                android:background="@null"/>
-        </LinearLayout>
-        <LinearLayout
-            android:background="@drawable/login_lin"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_password"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_gravity="center"/>
-            <EditText
-                android:hint="请输入密码"
-                android:textColor="#747272"
-                android:id="@+id/reg_paw"
-                android:inputType="textPassword"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:layout_height="60dp"
-                android:background="@null"/>
-        </LinearLayout>
-        <LinearLayout
-            android:background="@drawable/login_lin"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_password"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_gravity="center"/>
-            <EditText
-                android:hint="请再次输入密码"
-                android:inputType="textPassword"
-                android:textColor="#747272"
-                android:id="@+id/reg_paw_two"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="60dp"
-                android:background="@null"/>
+                android:background="@null"
+                android:text="手机号"
+                android:textSize="35dp"
+                android:textColor="#747272" />
+
         </LinearLayout>
         <LinearLayout
             android:background="@drawable/login_lin"
@@ -171,48 +114,17 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textSize="35dp"
                     android:text="男"
-                    android:id="@+id/male_reg"/>
+                    android:id="@+id/male_rb"/>
                 <RadioButton
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textSize="35dp"
                     android:text="女"
-                    android:id="@+id/famale_reg"/>
+                    android:id="@+id/famale_rb"/>
             </RadioGroup>
-        </LinearLayout>
-        <LinearLayout
-            android:background="@drawable/login_lin"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp">
-            <ImageView
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_em"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_gravity="center"/>
-            <EditText
-                android:hint="请输入验证码"
-                android:textColor="#747272"
-                android:id="@+id/reg_yzm"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="60dp"
-                android:background="@null"/>
-            <TextView
-                android:id="@+id/reg_code"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:textColor="@color/login"
-                android:text="获取验证码"
-                android:layout_margin="2dp"
-                android:background="@drawable/code_shape"
-                android:layout_width="140dp"
-                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>
@@ -223,17 +135,17 @@
         android:layout_height="60dp"
         android:layout_marginTop="20dp">
         <TextView
-            android:id="@+id/reg_okbt"
+            android:id="@+id/setting_okbt"
             android:layout_marginRight="30dp"
             android:background="@drawable/login_lin"
             android:layout_width="150dp"
             android:layout_height="60dp"
-            android:text="注册"
+            android:text="更改"
             android:textSize="20dp"
             android:gravity="center"
             />
         <TextView
-            android:id="@+id/reg_exit"
+            android:id="@+id/set_exit"
             android:background="@drawable/login_lin"
             android:layout_width="150dp"
             android:layout_height="60dp"
@@ -242,7 +154,27 @@
             android:gravity="center"/>
     </LinearLayout>
     <LinearLayout
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="20dp">
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/setting_exittologin"
+            android:background="@drawable/login_lin"
+            android:layout_width="330dp"
+            android:layout_height="60dp"
+            android:text="退出登录"
+            android:textSize="20dp"
+            android:gravity="center"
+            />
+
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        >
+
+    </LinearLayout>
+
 </LinearLayout>

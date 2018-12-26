@@ -52,10 +52,10 @@ public class VidvoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vidvo);
         ButterKnife.inject(this);
-//        getdata();
+        getdata();
        refreshLayout =findViewById(R.id.refreshLayout);
         onLondBanner();
-        refreshLayout.autoRefresh();
+//        refreshLayout.autoRefresh();
     }
 
     private void onLondBanner() {
