@@ -45,7 +45,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/selector_btn_test"
+        android:background="#29dcdc"
         android:padding="8dp"
         android:text="进入登录界面"
         android:textColor="@android:color/white"

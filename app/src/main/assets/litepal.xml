@@ -32,7 +32,7 @@
         </list>
     -->
     <list>
-        <mapping class="cdictv.news.JavaBean.UserInfo"></mapping>
+        <mapping class="cdictv.news.Been.UserInfo"></mapping>
     </list>
 
     <!--

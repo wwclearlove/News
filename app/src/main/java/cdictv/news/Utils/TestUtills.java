@@ -1,7 +1,6 @@
 package cdictv.news.Utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,9 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cdictv.news.Activity.LoginActivity;
-import cdictv.news.Activity.RegisteredActivity;
-import cdictv.news.JavaBean.UserInfo;
+import cdictv.news.Been.UserInfo;
 
 /**
  * 用于验证输入的密码 验证码验证规则

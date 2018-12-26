@@ -1,7 +1,12 @@
 package cdictv.news.Activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,23 +14,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cdictv.news.Been.FragmentBeen;
 import cdictv.news.R;
+import cdictv.news.Utils.saveUtil;
 import cdictv.news.fragment.MyFragment;
 import cdictv.news.fragment.ViewpagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-//    @InjectView(R.id.banner)
-//    Banner mBanner;
+
     @InjectView(R.id.mTooalbar)
     Toolbar mMTooalbar;
     @InjectView(R.id.mNavifationVion)
@@ -36,31 +44,87 @@ public class MainActivity extends AppCompatActivity {
     TabLayout mTablayout;
     @InjectView(R.id.viewPager)
     ViewPager mViewPager;
+    private boolean isExit;
+    private int tag=0;
+    //双击退出的 handler
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = true;
+        }
+    };
+
+    @Override
+    public void onBackPressed() {
+        if (isExit) {
+            finish();
+            System.exit(0);
+        } else {
+          Toast.makeText(getApplicationContext(),"再点击一次就退出应用",Toast.LENGTH_SHORT).show();
+            isExit = true;
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        }
+    }
     private ArrayList<MyFragment> arrayList=new ArrayList<>();
+    private ArrayList<FragmentBeen> arrays=new ArrayList<>();
     private ViewpagerAdapter adapter;
+    private String titles[]={"热门精选","国内新闻","国际新闻","社会新闻","娱乐新闻","IT资讯",
+            "NBA新闻","足球新闻"};
+    private int contents[]={R.layout.itemlayout,R.layout.itemlayout,R.layout.itemlayout
+            ,R.layout.itemlayout,R.layout.itemlayout,R.layout.itemlayout,
+            R.layout.itemlayout,R.layout.itemlayout};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-//        mBanner = findViewById(R.id.banner);
         mViewPager=findViewById(R.id.viewPager);
         mTablayout=findViewById(R.id.tablayout);
-//        initBanner();
+        mViewPager.setOffscreenPageLimit(0);
+
+        saveUtil util=new saveUtil(this,"fragmentList",arrays);
+        ArrayList<FragmentBeen> arrlist= util.showlist();
+        for (FragmentBeen been : arrlist) {
+            Log.d("==", been.getTitle());
+        }
+        arrays=util.showlist();
+        if(arrays.isEmpty()){
+            addArr();
+        }
+
+        addList(arrays);
+        initView(arrayList);
         initNav();
-        initView();
+
     }
 
-    private void initView() {
-//        for(int i=0;i<=10;i++){
-//            arrayList.add(new MyFragment("标题"+i,"内容"+i));
-//        }
-        arrayList.add(new MyFragment("新闻1",R.layout.itemlayout));
-        arrayList.add(new MyFragment("新闻2",R.layout.itemtwolayout));
-        arrayList.add(new MyFragment("新闻3",R.layout.itemtwolayout));
-        arrayList.add(new MyFragment("新闻4",R.layout.itemtwolayout));
-        arrayList.add(new MyFragment("新闻5",R.layout.itemtwolayout));
-        arrayList.add(new MyFragment("新闻6",R.layout.itemtwolayout));
+    private void addArr() {
+        for (int i = 0; i <titles.length ; i++) {
+            FragmentBeen been=new FragmentBeen();
+            been.setContent(contents[i]);
+            been.setTitle(titles[i]);
+            arrays.add(been);
+        }
+
+    }
+
+    private void addList( ArrayList<FragmentBeen> arrays) {
+        for (FragmentBeen been:arrays) {
+            arrayList.add(new MyFragment(been.getTitle(),been.getContent()));
+        }
+        for (MyFragment been : arrayList) {
+            Log.i("arraylist444",been.getTitle());
+
+        }
+    }
+
+    private void initView(ArrayList<MyFragment>  arrayList) {
+        for (MyFragment been : arrayList) {
+            Log.i("arraylist111",been.getTitle());
+
+        }
         adapter=new ViewpagerAdapter(getSupportFragmentManager(),arrayList);
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(false, new BackgroundToForegroundTransformer());
@@ -70,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initNav() {
+
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mMTooalbar, 0, 0);
 // 添加此句，toolbar左上角显示开启侧边栏图标
         mDrawerToggle.syncState();
@@ -78,38 +143,79 @@ public class MainActivity extends AppCompatActivity {
         mMNavifationVion.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(MainActivity.this, (item.getItemId() + "--" + item.getTitle().toString()), Toast.LENGTH_LONG).show();
+                switch (item.getTitle().toString()){
+                    case "我的导航":
+//                        Toast.makeText(MainActivity.this, ("--" + item.getTitle().toString()), Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(MainActivity.this,LoveActivity.class);
+                        Bundle bundle = new Bundle();
+////
+                        bundle.putSerializable("list",(Serializable)arrays);
+//
+                        intent.putExtras(bundle);
+//                        startActivity(intent);
+                        startActivityForResult(intent,1);
+//                        finish();
+                        break;
+                    case "我的视频":
+                        Intent tent=new Intent(MainActivity.this,VidvoActivity.class);
+                        startActivity(tent);
+                        break;
+                        default:
+                }
+//                Toast.makeText(MainActivity.this, (item.getItemId() + "--" + item.getTitle().toString()), Toast.LENGTH_LONG).show();
                 return true;
             }
         });
 
     }
 
-//    private void initBanner() {
-//        //设置banner样式
-//        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-//        //设置图片加载器
-//        mBanner.setImageLoader(new GlideImageLoader());
-//        //设置图片集合
-//        Integer[] images = {R.drawable.uoko_guide_background_1, R.drawable.uoko_guide_background_2, R.drawable.uoko_guide_background_3};
-//        mBanner.setImages(Arrays.asList(images));
-//        //设置banner动画效果
-//        mBanner.setBannerAnimation(Transformer.RotateDown);
-//        //设置标题集合（当banner样式有显示title时）
-//        List<String> titles = new ArrayList<>();
-//        titles.add("第一个标题");
-//        titles.add("第二个标题");
-//        titles.add("第三个标题");
-//        mBanner.setBannerTitles(titles);
-//        //设置自动轮播，默认为true
-//        mBanner.isAutoPlay(true);
-//        //设置轮播时间
-//        mBanner.setDelayTime(3500);
-//        //设置指示器位置（当banner模式中有指示器时）
-//        mBanner.setIndicatorGravity(BannerConfig.CENTER);
-//        //banner设置方法全部调用完毕时最后调用
-//        mBanner.start();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d("ff","调用");
+        if (requestCode==1&&resultCode== 2){
+//            Log.d("ff","调用2");
+            ArrayList<FragmentBeen>  arr = (ArrayList<FragmentBeen>)data.getSerializableExtra("List");
+            //arrays.removeAll(arrays);
+            arrays.clear();
+            for (FragmentBeen been : arrays) {
+                Log.i("ma-arrays",been.getTitle());
+                Log.i("ma-arrays","清空");
+
+            }
+            for (FragmentBeen been : arr) {
+                Log.i("ma-arr",been.getTitle());
+                arrays.add(been);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("===","onstart");
+        arrayList.clear();
+        for (FragmentBeen been : arrays) {
+            Log.i("arrays",been.getTitle());
+
+        }
+        addList(arrays);
+        for (MyFragment been : arrayList) {
+            Log.i("arraylist",been.getTitle());
+
+        }
+        initView(arrayList);
+        initNav();
+}
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        for (MyFragment been:arrayList) {
+//            been.getActivity().finish();
+//        }
 //    }
-//
+
 
 }
