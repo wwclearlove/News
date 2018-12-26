@@ -3,8 +3,6 @@ package cdictv.news.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,24 +14,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import cdictv.news.Activity.ContentActivity;
 import cdictv.news.Adapter.MessageAdapter;
 import cdictv.news.Been.MessBeen;
 import cdictv.news.R;
 import cdictv.news.Utils.GlideImageLoader;
-import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -51,8 +50,12 @@ public class MyFragment extends Fragment {
     private View inflate = null;
     private String data;
     private List<MessBeen.NewslistBean> mlist;
+    private List<MessBeen.NewslistBean> zymlist;
     private RecyclerView mRv;
     private MessageAdapter mMessageAdapter;
+    private String uri;
+    private String duri;
+    RefreshLayout refreshLayout;
     public String getTitle() {
         return title;
     }
@@ -64,7 +67,9 @@ public class MyFragment extends Fragment {
     @SuppressLint("ValidFragment")
     public MyFragment(String title,int layout) {
         super();
+        Log.d("title1",title);
         this.title = title;
+        Log.d("title2", this.title);
         this.content = layout;
     }
 
@@ -72,53 +77,141 @@ public class MyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        uri="http://api.tianapi.com/guonei/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+        duri="http://api.tianapi.com/wxnew/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.d("==","没到");
         final View inflate = inflater.inflate(content, null);
-        if(content== R.layout.itemlayout){
-            mBanner = inflate.findViewById(R.id.banner);
-            Log.i("==",mBanner+"");
-            initBanner();
-        }
-        if(content==R.layout.itemtwolayout) {
-            mRv=inflate.findViewById(R.id.rv);
-            final WaveSwipeRefreshLayout mWaveSwipeRefreshLayout = inflate.findViewById(R.id.wave);
-            //设置中间小圆从白色到黑色
-            mWaveSwipeRefreshLayout.setColorSchemeColors(Color.WHITE, Color.BLACK);
-            //设置整体的颜色
-            mWaveSwipeRefreshLayout.setWaveColor(Color.argb(255, 92, 227, 248));
-            //下拉刷新
-            mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-//                            getData();
-//                            initRv();
-                            //三秒后停止刷新
-                            mWaveSwipeRefreshLayout.setRefreshing(false);
-                            Toast.makeText(inflate.getContext(),"刷新完成",Toast.LENGTH_SHORT).show();
-                        }
-                    },3000);
-                }
-            });
+        if(content==R.layout.itemlayout){
 
-            getData();
+        mRv=inflate.findViewById(R.id.rv);
+        mBanner = inflate.findViewById(R.id.banner);
+        refreshLayout =inflate.findViewById(R.id.refreshLayout);
+        refreshLayout.setEnableScrollContentWhenRefreshed(true);
+        refreshLayout.setEnableRefresh(true);//是否启用下拉刷新功能
+        refreshLayout.setEnableLoadMore(false);//是否启用上拉加载功能
+            Log.d("title",title);
+        switch(title){
+            case "热门精选":
+                uri="http://api.tianapi.com/wxnew/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                break;
+            case "国内新闻":
+                duri="http://api.tianapi.com/guonei/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+             break;
+            case "国际新闻":
+                uri="http://api.tianapi.com/world/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/world/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
 
+            case "社会新闻":
+                uri="http://api.tianapi.com/social/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/social/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "足球新闻":
+                uri="http://api.tianapi.com/football/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/football/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "娱乐新闻":
+                uri="http://api.tianapi.com/huabian/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/huabian/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+
+            case "IT资讯":
+                uri="http://api.tianapi.com/it/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/it/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "NBA新闻":
+                uri="http://api.tianapi.com/nba/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/nba/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "移动互联":
+                uri="http://api.tianapi.com/mobile/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/mobile/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "健康知识":
+                uri="http://api.tianapi.com/health/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/health/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "科技新闻":
+                uri="http://api.tianapi.com/keji/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/keji/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "体育新闻":
+                uri="http://api.tianapi.com/tiyu/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/tiyu/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "创业新闻":
+                uri="http://api.tianapi.com/startup/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/startup/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "苹果新闻":
+                uri="http://api.tianapi.com/apple/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/apple/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "军事新闻":
+                uri="http://api.tianapi.com/military/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/military/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            case "旅游资讯":
+                uri="http://api.tianapi.com/travel/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/travel/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "奇闻异事":
+                uri="http://api.tianapi.com/qiwen/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/qiwen/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+
+                break;
+            case "人工智能":
+                uri="http://api.tianapi.com/ai/?key=6edb9118c6ce61c710140aeb03b10e2c&num=50&rand=1";
+                duri="http://api.tianapi.com/ai/?key=6edb9118c6ce61c710140aeb03b10e2c&num=5&rand=1";
+                break;
+            default:
         }
+        getzhuyeData(duri);
+        onLondBanner();
+        getData(uri);
+        refreshLayout.autoRefresh();
+      }
 
         return inflate;
     }
 
-    private void getData() {
+    private void onLondBanner() {
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                getData(uri);
+                getzhuyeData(duri);
+                refreshLayout.finishRefresh();
+            }
+
+            @Override
+            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
+                getData(uri);
+                getzhuyeData(duri);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.finishRefresh();
+                    }
+                },1000);
+
+            }
+        });
+    }
+
+    private void getData(String uri) {
         OkHttpClient mOkHttpClient=new OkHttpClient();
-        Request.Builder requestBuilder = new Request.Builder().url("https://api.tianapi.com/social/?key=\n" +
-                "6edb9118c6ce61c710140aeb03b10e2c\n&num=50&rand=1");
+        Request.Builder requestBuilder = new Request.Builder().url(uri);
         //可以省略，默认是GET请求
         requestBuilder.method("GET",null);
         Request request = requestBuilder.build();
@@ -139,19 +232,19 @@ public class MyFragment extends Fragment {
                     MessBeen resultBean = new Gson().fromJson(data,MessBeen.class);
                     //对象中拿到集合
                     mlist = resultBean.getNewslist();
-
-//                    mlist= gson.fromJson(data,new TypeToken<List<MessBeen>>(){}.getType());
-//                    for (MessBeen.NewslistBean been: mlist) {
-//                        Log.d("==",been.getPicUrl()+"");
-//                        Log.d("==",been.getTitle()+"");
-//                        Log.d("==",been.getDescription()+"");
-//                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initRv();
+                        }
+                    });
                 }
 
             }
         });
-        initRv();
+
     }
+
     private void initRv() {
         //设置recyclerview的布局样式（从上往下，还是从左往右，还是瀑布流）从左往右LinearLayoutManager.HORIZONTAL
         mRv.setLayoutManager(new LinearLayoutManager(context));//默认表示从上往下
@@ -168,9 +261,12 @@ public class MyFragment extends Fragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 //                ToastUtils.showShort(position+"");
-                Intent intent=new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.setData(Uri.parse(mlist.get(position).getUrl()));
+
+                Intent intent=new Intent(getContext(), ContentActivity.class);
+                intent.putExtra("title",mlist.get(position).getTitle());
+                intent.putExtra("uri",mlist.get(position).getUrl());
+//                intent.setAction("android.intent.action.VIEW");
+//                intent.setData(Uri.parse(mlist.get(position).getUrl()));
                 startActivity(intent);
             }
         });
@@ -182,23 +278,73 @@ public class MyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //textView.setText(content);
     }
-    private void initBanner() {
+    private void getzhuyeData( String duri) {
+        Log.d("++","进入后");
+        OkHttpClient mOkHttpClient=new OkHttpClient();
+        Request.Builder requestBuilder = new Request.Builder().url(duri);
+        //可以省略，默认是GET请求
+        requestBuilder.method("GET",null);
+        Request request = requestBuilder.build();
+        Call mcall= mOkHttpClient.newCall(request);
+        Log.d("==","jiaz");
+        mcall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null != response.cacheResponse()) {
+                    String str = response.cacheResponse().toString();
+                    Log.i("===", "cache---" + str);
+                } else {
+                    String data = response.body().string();
+                    MessBeen resultBean = new Gson().fromJson(data,MessBeen.class);
+                    //对象中拿到集合
+                    zymlist = resultBean.getNewslist();
+//                    Log.i("===1111", zymlist.toString());
+//                    for (MessBeen.NewslistBean been: zymlist) {
+//                        Log.d("===111",been.getTitle());
+//                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initBanner();
+                        }
+                    });
+
+                }
+
+            }
+        });
+//        Log.d("===222","++");
+//        Log.d("===222",zymlist.toString());
+
+
+    }
+
+    private void initBanner() {
+//        Log.d("===333",zymlist.toString());
+//        for (MessBeen.NewslistBean been: zymlist) {
+//            Log.d("+++",been.getTitle());
+//
+//        }
         //设置banner样式
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         //设置图片集合
-        Integer[] images = {R.drawable.uoko_guide_background_1, R.drawable.uoko_guide_background_2, R.drawable.uoko_guide_background_3};
-        mBanner.setImages(Arrays.asList(images));
-        //设置banner动画效果
-        mBanner.setBannerAnimation(Transformer.RotateDown);
-        //设置标题集合（当banner样式有显示title时）
+        List<String> imgs=new ArrayList<>();
         List<String> titles = new ArrayList<>();
-        titles.add("第一个标题");
-        titles.add("第二个标题");
-        titles.add("第三个标题");
+//        mBanner.setImages();
+        for (int i = 0; i < zymlist.size(); i++) {
+//t
+           imgs.add(zymlist.get(i).getPicUrl());
+           titles.add(zymlist.get(i).getTitle());
+        }
+        mBanner.setImages(imgs);
         mBanner.setBannerTitles(titles);
+        mBanner.setBannerAnimation(Transformer.RotateDown);
         //设置自动轮播，默认为true
         mBanner.isAutoPlay(true);
         //设置轮播时间
@@ -207,5 +353,23 @@ public class MyFragment extends Fragment {
         mBanner.setIndicatorGravity(BannerConfig.CENTER);
         //banner设置方法全部调用完毕时最后调用
         mBanner.start();
+      mBanner.setOnBannerListener(new OnBannerListener() {
+          @Override
+          public void OnBannerClick(int position) {
+              Intent intent=new Intent(getContext(), ContentActivity.class);
+              intent.putExtra("title",zymlist.get(position).getTitle());
+              intent.putExtra("uri",zymlist.get(position).getUrl());
+              startActivity(intent);
+      }
+      });
+    }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }
+
+

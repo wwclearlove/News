@@ -21,7 +21,7 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cdictv.news.JavaBean.UserInfo;
+import cdictv.news.Been.UserInfo;
 import cdictv.news.R;
 import cdictv.news.Utils.TestUtills;
 import okhttp3.FormBody;

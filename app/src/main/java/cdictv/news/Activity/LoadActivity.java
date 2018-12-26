@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import cdictv.news.R;
 import cn.bingoogolapple.bgabanner.BGABanner;
@@ -40,7 +39,7 @@ public class LoadActivity extends AppCompatActivity {
         mForegroundBanner.setEnterSkipViewIdAndDelegate(R.id.btn_guide_enter, R.id.tv_guide_skip, new BGABanner.GuideDelegate() {
             @Override
             public void onClickEnterOrSkip() {
-                 Toast.makeText(getApplicationContext(),"跳过去了",Toast.LENGTH_LONG).show();
+//                 Toast.makeText(getApplicationContext(),"跳过去了",Toast.LENGTH_LONG).show();
                 startActivity(new Intent(LoadActivity.this, LoginActivity.class));
                 finish();
             }
@@ -52,14 +51,13 @@ public class LoadActivity extends AppCompatActivity {
         BGALocalImageSize localImageSize = new BGALocalImageSize(720, 1280, 320, 640);
         // 设置数据源
         mBackgroundBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
-                R.drawable.uoko_guide_background_1,
-                R.drawable.uoko_guide_background_2,
-                R.drawable.uoko_guide_background_3);
+                R.drawable.zt1
+              );
 
         mForegroundBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
-                R.drawable.uoko_guide_foreground_1,
-                R.drawable.uoko_guide_foreground_2,
-                R.drawable.uoko_guide_foreground_3);
+                R.drawable.yd1,
+                R.drawable.timg,
+                R.drawable.yd3);
     }
 
     @Override

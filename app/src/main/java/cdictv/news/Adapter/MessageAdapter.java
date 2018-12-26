@@ -36,6 +36,7 @@ package cdictv.news.Adapter;
 
 //}
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -60,15 +61,19 @@ public class MessageAdapter extends BaseQuickAdapter<MessBeen.NewslistBean, Base
     protected void convert(BaseViewHolder helper, MessBeen.NewslistBean item) {
 //        for(int i = 0;i<mList.size();i++){
         helper.setText(R.id.tv_mes_title,item.getTitle())
+                .setText(R.id.tv_description,item.getDescription())
                     .setText(R.id.tv_mes_date,item.getCtime());
          ImageView iv=helper.itemView.findViewById(R.id.iv_img);
+         if(item.getPicUrl().isEmpty()){
+             iv.setVisibility(View.GONE);
+         }else{
             Glide.with(helper.itemView.getContext()).load(item.getPicUrl())
-                    .error(R.mipmap.ic_launcher_round)//解析地址错误加载的图片
-                    .placeholder(R.mipmap.ic_launcher)//正在加载过程的图片
+                    .error(R.drawable.sb)//解析地址错误加载的图片
+                    .placeholder(R.drawable.timg)//正在加载过程的图片
                     .transform(new GlideRoundTransform(helper.itemView.getContext(),10))//加载圆角图片 30转化为dp单位
                     .crossFade()//渐变展示图片动画
                     .into(iv);
-
+         }
 //            Glide.with(helper.itemView.getContext()).load(item.getUri()).asGif()
 //                    .error(R.mipmap.ic_launcher_round)//解析地址错误加载的图片
 //                    .placeholder(R.mipmap.ic_launcher)//正在加载过程的图片

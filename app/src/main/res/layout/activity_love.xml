@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Activity.LoveActivity">
+    <LinearLayout
+        android:id="@+id/lin_dh"
+        android:orientation="horizontal"
+        android:background="#5fecfc"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+            android:onClick="click"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/next"/>
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="导航"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#000"
+            >
+
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+
+            android:text="我的导航"/>
+        <cdictv.news.fragment.FlowLayout
+            android:id="@+id/id_flowlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:padding="10dp" >
+        </cdictv.news.fragment.FlowLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="添加导航"/>
+    <cdictv.news.fragment.FlowLayout
+        android:id="@+id/id_allflowlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="10dp" >
+    </cdictv.news.fragment.FlowLayout>
+    </LinearLayout>
+</LinearLayout>
