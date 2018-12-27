@@ -26,9 +26,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -275,7 +272,7 @@ public class RegisteredActivity extends AppCompatActivity {
     }
 
 
-    private  void initPermissions() {
+    public   void initPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int hasReadPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);

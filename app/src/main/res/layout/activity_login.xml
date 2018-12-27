@@ -59,13 +59,14 @@
                     android:src="@drawable/ic_user" />
 
                 <EditText
+                    android:maxLines="1"
                     android:id="@+id/login_user"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="用户名/手机号"
+                    android:hint="用户名"
                     android:textColor="#747272" />
             </LinearLayout>
             <View
@@ -84,6 +85,7 @@
                     android:layout_height="42dp"
                     android:layout_gravity="center"/>
                 <EditText
+                    android:maxLines="1"
                     android:inputType="textPassword"
                     android:hint="请输入密码"
                     android:textColor="#747272"

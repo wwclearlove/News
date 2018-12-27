@@ -52,7 +52,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 
-
     //播放器
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
 

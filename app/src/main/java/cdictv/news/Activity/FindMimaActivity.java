@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +64,9 @@ public class FindMimaActivity extends AppCompatActivity {
                 case 1:
                     String date = (String)msg.obj;
                     Toast.makeText(FindMimaActivity.this,date,Toast.LENGTH_SHORT).show();
+                    if(date.equals("修改成功")){
+                        finish();
+                    }
                     break;
                 case 2:
                     findCode.setBackgroundResource(R.drawable.regis_but);
@@ -176,7 +178,7 @@ public class FindMimaActivity extends AppCompatActivity {
                 RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"), userjson);
 
                 Request request = new Request.Builder()
-                        .url("http://134.175.154.154/new/api/news/update")
+                        .url("http://134.175.154.154/new/api/news/updatepsd")
                         .post(requestBody)
                         .build();
 

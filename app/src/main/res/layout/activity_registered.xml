@@ -90,6 +90,7 @@
                 android:layout_gravity="center"
                 />
             <EditText
+                android:maxLines="1"
                 android:hint="手机号"
                 android:textColor="#747272"
                 android:id="@+id/reg_phone"
@@ -113,6 +114,7 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center"/>
             <EditText
+                android:maxLines="1"
                 android:hint="请输入密码"
                 android:textColor="#747272"
                 android:id="@+id/reg_paw"
@@ -137,6 +139,7 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center"/>
             <EditText
+                android:maxLines="1"
                 android:hint="请再次输入密码"
                 android:inputType="textPassword"
                 android:textColor="#747272"
@@ -195,6 +198,7 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center"/>
             <EditText
+                android:maxLines="1"
                 android:hint="请输入验证码"
                 android:textColor="#747272"
                 android:id="@+id/reg_yzm"

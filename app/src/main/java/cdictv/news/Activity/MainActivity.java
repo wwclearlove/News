@@ -183,9 +183,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(setintent);
                         break;
                     case "关于我们":
-//                        Intent setintent =new Intent(MainActivity.this,SettingUserActivity.class);
-//                        setintent.putExtra("data_user",userinfo);
-//                        startActivity(setintent);
+                        Intent meintent =new Intent(MainActivity.this,AboutWeActivity.class);
+                        startActivity( meintent);
                         break;
                     default:
                 }

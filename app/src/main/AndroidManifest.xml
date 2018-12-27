@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cdictv.news">
+          package="cdictv.news">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".BaseApplication"
@@ -13,17 +13,17 @@
         android:roundIcon="@mipmap/icpion"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.LoadActivity" >
+        <activity android:name=".Activity.MainActivity"/>
+        <activity android:name=".Activity.LoadActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".Activity.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"/>
         <activity android:name=".Activity.RegisteredActivity">
         </activity>
 
@@ -34,21 +34,19 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".Activity.SettingUserActivity" />
+        <activity android:name=".Activity.SettingUserActivity"/>
         <activity android:name=".Activity.FindMimaActivity">
-
         </activity>
         <activity android:name=".Activity.ContentActivity">
-
         </activity>
         <activity android:name=".Activity.LoveActivity">
-
         </activity>
         <activity android:name=".Activity.VidvoActivity">
-
+        </activity>
+        <activity android:name=".Activity.AboutWeActivity">
         </activity>
     </application>
 

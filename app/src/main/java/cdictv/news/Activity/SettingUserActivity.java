@@ -202,7 +202,7 @@ public class SettingUserActivity extends AppCompatActivity {
     /**
      * 8.0以上的手机获取的权限
      */
-    private  void initPermissions() {
+    public   void initPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int hasReadPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -272,7 +272,7 @@ public class SettingUserActivity extends AppCompatActivity {
                 RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"), userjson);
 
                 Request request = new Request.Builder()
-                        .url("http://134.175.154.154/new/api/news/update")
+                        .url("http://134.175.154.154/new/api/news/updatepsd")
                         .post(requestBody)
                         .build();
 
@@ -315,7 +315,7 @@ public class SettingUserActivity extends AppCompatActivity {
                     if (hasSdcard()) {
                         imageUri = Uri.fromFile(fileUri);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                            imageUri = FileProvider.getUriForFile(SettingUserActivity.this, "com.zz.fileprovider", fileUri);//通过FileProvider创建一个content类型的Uri
+                            imageUri = FileProvider.getUriForFile(SettingUserActivity.this, "cdictv.news.cameraalbumtest.fileProvider", fileUri);//通过FileProvider创建一个content类型的Uri
                         PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
 
                     } else {
@@ -362,7 +362,7 @@ public class SettingUserActivity extends AppCompatActivity {
                         cropImageUri = Uri.fromFile(fileCropUri);
                         Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                            newUri = FileProvider.getUriForFile(this, "com.zz.fileprovider", new File(newUri.getPath()));
+                            newUri = FileProvider.getUriForFile(this, "cdictv.news.cameraalbumtest.fileProvider", new File(newUri.getPath()));
                         PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, 150, 150, CODE_RESULT_REQUEST);
                     } else {
                         Toast.makeText(this, "设备没有SD卡！", Toast.LENGTH_SHORT).show();
