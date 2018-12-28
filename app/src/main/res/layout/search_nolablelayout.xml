@@ -3,8 +3,8 @@
           android:layout_width="100dp"
           android:layout_height="wrap_content"
           android:layout_margin="5dp"
-          android:background="#ece6e6"
-          android:textColor="#000"
+          android:background="@drawable/love_inco"
+          android:textColor="#898989"
           android:textSize="15sp"
           android:gravity="center"
           android:text="Helloworld" >

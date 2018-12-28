@@ -4,16 +4,46 @@
     <item
         android:id="@+id/love"
         android:icon="@drawable/daohang"
-        android:title="我的导航"/>
+        android:title="我的导航"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#b9b8b8"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#a6a2a2"
+        />
     <item
         android:id="@+id/photo"
         android:icon="@drawable/shiping"
         android:title="我的视频"/>
-     
+     <View
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:background="#b9b8b8"
+    />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#a6a2a2"
+        />
     <item
         android:id="@+id/file"
         android:icon="@drawable/shezhi"
-        android:title="我的设置"/>
+        android:title="我的信息"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#b9b8b8"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#a6a2a2"
+        />
     <item
         android:id="@+id/wallet"
         android:icon="@drawable/xiangche"

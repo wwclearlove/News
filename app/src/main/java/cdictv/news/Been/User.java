@@ -1,4 +1,4 @@
-package cdictv.news.JavaBean;
+package cdictv.news.Been;
 
 import java.io.Serializable;
 

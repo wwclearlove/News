@@ -36,7 +36,7 @@
         android:clickable="true"
         android:padding="4dp"
         android:text="跳过 >"
-        android:textColor="@android:color/holo_purple"
+        android:textColor="#c5c5c5"
         android:textSize="16sp"/>
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:background="#29dcdc"
+        android:background="@drawable/load_shape"
         android:padding="8dp"
         android:text="进入登录界面"
         android:textColor="@android:color/white"

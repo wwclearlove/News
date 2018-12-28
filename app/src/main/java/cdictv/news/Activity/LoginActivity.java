@@ -5,14 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -26,23 +24,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cdictv.news.JavaBean.User;
+import cdictv.news.Been.User;
 import cdictv.news.R;
 import cdictv.news.Utils.DBManager;
-import cdictv.news.Utils.File_upload;
 import cdictv.news.Utils.TestUtills;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -100,7 +91,7 @@ public class LoginActivity extends Activity {
 //                            intent.putExtra("imageString",user2.getPhoto());
                             intent.putExtra("data_user",user2);
                             //intent.putExtra("photo",user.getName()+"Photo.jpg");
-                            initJiZhuMiMa(user2.getName(),user2.getPassword(),user2.getPhoto());
+                            initJiZhuMiMa(user2.getName(),user2.getPassword(),user2.getPhoto(),user2.getTel(),user2.getSex());
                             startActivity(intent);
                             finish();
                         }else {
@@ -130,6 +121,7 @@ public class LoginActivity extends Activity {
      * 在注册时完成是把密码回传回来显示在界面上
      */
     private void initIntentDate() {
+
         loginUser = findViewById(R.id.login_user);
         loginPassword = findViewById(R.id.login_password);
         imgTouxian = findViewById(R.id.img_touxian);
@@ -195,18 +187,21 @@ public class LoginActivity extends Activity {
     /**
      * 通过loginMima.isChecked()的点击开启时
      * 来对SharedPreferences里写上数据
+     *
      * @param username
      * @param paw
      *
      *
      */
-    private void initJiZhuMiMa(String username, String paw,String imageString) {
+    private void initJiZhuMiMa( String username, String paw, String imageString,String tel, String sex) {
         editor = getSharedPreferences("mimadate",MODE_PRIVATE).edit();
         //如果勾选CheckBox的选项 把数据写入SharedPreferences中 没有则在SharedPreferences的Boolean中写入false中
+        editor.putString("username",username);
+        editor.putString("paw",paw);
+        editor.putString("imageString",imageString);
+        editor.putString("tel",tel);
+        editor.putString("sex",sex);
         if(loginMima.isChecked()){
-            editor.putString("username",username);
-            editor.putString("paw",paw);
-            editor.putString("imageString",imageString);
             editor.putBoolean("falg",true);
             editor.apply();
         }else {
@@ -274,7 +269,6 @@ public class LoginActivity extends Activity {
                         String username = bundle.getString("username");
                         loginUser.setText(username);
                         loginPassword.setText(pawtwo);
-
                     }
                     break;
             }
@@ -348,21 +342,21 @@ public class LoginActivity extends Activity {
         String imgString = sp.getString("imageString","");
         boolean falg  = sp.getBoolean("falg",false);
 
+        Glide.with(LoginActivity.this).load(imgString).asBitmap().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(new BitmapImageViewTarget(imgTouxian) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(LoginActivity.this.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                imgTouxian.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+
         //通过读取SharedPreferences里面的数据来判断是否勾选CheckBox的选项 来设置数据
         if(falg){
             loginUser.setText(userlog);
             loginPassword.setText(pawlog);
             loginMima.setChecked(falg);
-            Log.i("11111111", "initMiMa: "+imgString);
-            Glide.with(LoginActivity.this).load("https://songtell-1251684550.cos.ap-chengdu.myqcloud.com/news/"+imgString).asBitmap().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(new BitmapImageViewTarget(imgTouxian) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(LoginActivity.this.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    imgTouxian.setImageDrawable(circularBitmapDrawable);
-                }
-            });
         }
     }
 

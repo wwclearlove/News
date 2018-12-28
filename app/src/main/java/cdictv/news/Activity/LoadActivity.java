@@ -55,9 +55,9 @@ public class LoadActivity extends AppCompatActivity {
               );
 
         mForegroundBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
-                R.drawable.yd1,
-                R.drawable.timg,
-                R.drawable.yd3);
+                R.drawable.bg1,
+                R.drawable.bg2,
+                R.drawable.bg3);
     }
 
     @Override

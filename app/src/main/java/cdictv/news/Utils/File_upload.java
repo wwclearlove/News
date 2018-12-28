@@ -24,7 +24,7 @@ import com.tencent.qcloud.core.auth.ShortTimeCredentialProvider;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import cdictv.news.JavaBean.User;
+import cdictv.news.Been.User;
 
 
 public class File_upload {

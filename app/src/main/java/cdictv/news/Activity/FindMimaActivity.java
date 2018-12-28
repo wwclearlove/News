@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cdictv.news.JavaBean.User;
+import cdictv.news.Been.User;
 import cdictv.news.R;
 import cdictv.news.Utils.TestUtills;
 import okhttp3.FormBody;

@@ -3,6 +3,7 @@ package cdictv.news.Activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,7 +41,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cdictv.news.JavaBean.User;
+import cdictv.news.BaseApplication;
+import cdictv.news.Been.User;
 import cdictv.news.R;
 import cdictv.news.Utils.File_upload;
 import cdictv.news.Utils.PhotoUtils;
@@ -74,7 +76,7 @@ public class SettingUserActivity extends AppCompatActivity {
     TextView settingExittologin;
 
     private User intent;
-    private User userset;
+    private User  userset;
     private String nameuser;
     private File fileUri = new File(Environment.getExternalStorageDirectory().getPath() + "/photo.jpg");
     private File fileCropUri = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");
@@ -82,6 +84,9 @@ public class SettingUserActivity extends AppCompatActivity {
     private Uri imageUri;
     private Uri cropImageUri;
     private Bitmap cricketbitmap;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    protected BaseApplication application;
     private static final int CODE_GALLERY_REQUEST = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
     private static final int CODE_RESULT_REQUEST = 0xa2;
@@ -138,6 +143,10 @@ public class SettingUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_user);
+        if (application == null) {
+            application = (BaseApplication) getApplicationContext();
+        }
+        application.addActivity(this);
         ButterKnife.inject(this);
         initDateUser();
     }
@@ -146,6 +155,7 @@ public class SettingUserActivity extends AppCompatActivity {
      * 调转过来的数据进行对显示用户的信息渲染
      */
     private void initDateUser() {
+        sp = getSharedPreferences("mimadate",MODE_PRIVATE);
         intent = (User) getIntent().getSerializableExtra("data_user");
         setTouxian = findViewById(R.id.set_touxian);
         setUser = findViewById(R.id.set_user);
@@ -184,15 +194,21 @@ public class SettingUserActivity extends AppCompatActivity {
                 settingDateuser();
                 break;
             case R.id.set_exit:
-                Intent intent = new Intent(SettingUserActivity.this, MainActivity.class);
-                intent.putExtra("data_user", userset);
-                startActivity(intent);
+                Intent tointent = new Intent(SettingUserActivity.this, MainActivity.class);
+                if(userset!=null){
+                    tointent.putExtra("data_user", userset);
+                }else {
+                    tointent.putExtra("data_user", intent);
+                }
+                startActivity(tointent);
+                finish();
                 break;
             case R.id.set_touxian:
                 PhotoUtils.openPic(this, CODE_GALLERY_REQUEST);
                 initPermissions();
                 break;
             case R.id.setting_exittologin:
+                application.exit();
                 startActivity(new Intent(SettingUserActivity.this,LoginActivity.class));
                 finish();
                 break;
@@ -252,11 +268,15 @@ public class SettingUserActivity extends AppCompatActivity {
         }
         userset.setSex(sex);
         userset.setSex(intent.getPassword());
+        editor = getSharedPreferences("mimadate",MODE_PRIVATE).edit();
+
 
         if (fileCropUri.exists()) {
             new File_upload(SettingUserActivity.this, fileCropUri.getPath(), userset);
         }
         userset.setPhoto("https://songtell-1251684550.cos.ap-chengdu.myqcloud.com/news/" + intent.getName() + "Photo.jpg");
+        editor.putString("imageString",userset.getPhoto());
+        editor.putString("sex",sex);
         new Thread(new Runnable() {
             @Override
             public void run() {

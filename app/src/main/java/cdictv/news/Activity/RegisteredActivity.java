@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cdictv.news.JavaBean.User;
+import cdictv.news.Been.User;
 import cdictv.news.R;
 import cdictv.news.Utils.File_upload;
 import cdictv.news.Utils.PhotoUtils;
@@ -64,16 +65,18 @@ public class RegisteredActivity extends AppCompatActivity {
     TextView regCode;
     @InjectView(R.id.reg_okbt)
     TextView regOkbt;
-    @InjectView(R.id.reg_exit)
-    TextView regExit;
     @InjectView(R.id.reg_touxian)
     ImageView regTouxian;
     @InjectView(R.id.male_reg)
     RadioButton maleReg;
     @InjectView(R.id.famale_reg)
     RadioButton famaleReg;
+    @InjectView(R.id.reg_exit)
+    ImageView mRegExit;
+    @InjectView(R.id.sex_rg)
+    RadioGroup mSexRg;
 
-//    private List<UserInfo> userInfos;
+    //    private List<UserInfo> userInfos;
     private Thread thread;
     private String code;
     public static final String PACKAGE_NAME = "cdictv.news";
@@ -90,7 +93,7 @@ public class RegisteredActivity extends AppCompatActivity {
     private Uri cropImageUri;
     private User user;
     private Bitmap cricketbitmap;
-    private long timenum =0;
+    private long timenum = 0;
 
 
     @SuppressLint("HandlerLeak")
@@ -111,7 +114,7 @@ public class RegisteredActivity extends AppCompatActivity {
                     if (user1 != null) {
                         Intent intent = new Intent(RegisteredActivity.this, LoginActivity.class);
 
-                        intent.putExtra("data_user",user1);
+                        intent.putExtra("data_user", user1);
                         if (fileCropUri.exists()) {
                             File_upload file_upload = new File_upload(RegisteredActivity.this, fileCropUri.getPath(), user1);
                         }
@@ -138,7 +141,6 @@ public class RegisteredActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered);
         ButterKnife.inject(this);
-
     }
 
 
@@ -180,25 +182,25 @@ public class RegisteredActivity extends AppCompatActivity {
                                     if (yzm.isEmpty()) {
                                         Toast.makeText(RegisteredActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        if(maleReg.isChecked() || famaleReg.isChecked()){
+                                        if (maleReg.isChecked() || famaleReg.isChecked()) {
                                             user = new User();
                                             user.setName(username);
                                             user.setPassword(pawtwo);
                                             user.setTel(phone);
                                             user.setPhoto("https://songtell-1251684550.cos.ap-chengdu.myqcloud.com/news/" + user.getName() + "Photo.jpg");
-                                            String sex =null;
-                                            if(maleReg.isChecked()){
+                                            String sex = null;
+                                            if (maleReg.isChecked()) {
                                                 //男为1
                                                 sex = "1";
-                                            }else if(famaleReg.isChecked()){
+                                            } else if (famaleReg.isChecked()) {
                                                 //女为0
                                                 sex = "0";
                                             }
                                             user.setSex(sex);
                                             if (code.equals(yzm)) {
-                                            new Thread(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
                                                         Gson gson = new Gson();
                                                         String userjson = gson.toJson(user);
@@ -227,12 +229,12 @@ public class RegisteredActivity extends AppCompatActivity {
                                                         } catch (NullPointerException e) {
                                                             e.printStackTrace();
                                                         }
-                                                }
-                                            }).start();
+                                                    }
+                                                }).start();
                                             } else {
                                                 Toast.makeText(RegisteredActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
                                             }
-                                        }else {
+                                        } else {
                                             Toast.makeText(RegisteredActivity.this, "请选择性别", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -272,7 +274,7 @@ public class RegisteredActivity extends AppCompatActivity {
     }
 
 
-    public   void initPermissions() {
+    public void initPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int hasReadPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -297,6 +299,7 @@ public class RegisteredActivity extends AppCompatActivity {
 
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -373,7 +376,7 @@ public class RegisteredActivity extends AppCompatActivity {
                     imageUri = FileProvider.getUriForFile(RegisteredActivity.this, "cdictv.news.cameraalbumtest.fileProvider", fileUri);//通过FileProvider创建一个content类型的Uri
                 PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
             } else {
-                Toast.makeText(this,"设备没有SD卡",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "设备没有SD卡", Toast.LENGTH_SHORT).show();
             }
             PhotoUtils.openPic(this, CODE_RESULT_REQUEST);
         }
@@ -397,10 +400,10 @@ public class RegisteredActivity extends AppCompatActivity {
                             imageUri = FileProvider.getUriForFile(RegisteredActivity.this, "cdictv.news.cameraalbumtest.fileProvider", fileUri);//通过FileProvider创建一个content类型的Uri
                         PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
                     } else {
-                        Toast.makeText(this,"设备没有SD卡",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "设备没有SD卡", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this,"请允许打开相机！！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请允许打开相机！！", Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
@@ -498,7 +501,7 @@ public class RegisteredActivity extends AppCompatActivity {
                     }
                 }).start();
 
-                 timenum = 60;
+                timenum = 60;
                 //开启手机验证码按钮倒计时
                 thread = new Thread(new Runnable() {
                     //设置时间的的长度

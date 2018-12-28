@@ -2,6 +2,7 @@ package cdictv.news.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,8 +35,9 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cdictv.news.BaseApplication;
 import cdictv.news.Been.FragmentBeen;
-import cdictv.news.JavaBean.User;
+import cdictv.news.Been.User;
 import cdictv.news.R;
 import cdictv.news.Utils.saveUtil;
 import cdictv.news.fragment.MyFragment;
@@ -56,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mViewPager;
 
 
-    private cdictv.news.JavaBean.User userinfo;
+    private User userinfo;
     private boolean isExit;
     private int tag=0;
+    private SharedPreferences sp;
+    protected BaseApplication application;
     //双击退出的 handler
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -90,10 +94,15 @@ public class MainActivity extends AppCompatActivity {
     private int contents[]={R.layout.itemlayout,R.layout.itemlayout,R.layout.itemlayout
             ,R.layout.itemlayout,R.layout.itemlayout,R.layout.itemlayout,
             R.layout.itemlayout,R.layout.itemlayout};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (application == null) {
+            application = (BaseApplication) getApplicationContext();
+        }
+        application.addActivity(this);
         ButterKnife.inject(this);
         mViewPager=findViewById(R.id.viewPager);
         mTablayout=findViewById(R.id.tablayout);
@@ -177,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent tent=new Intent(MainActivity.this,VidvoActivity.class);
                         startActivity(tent);
                         break;
-                    case "我的设置":
+                    case "我的信息":
                         Intent setintent =new Intent(MainActivity.this,SettingUserActivity.class);
                         setintent.putExtra("data_user",userinfo);
                         startActivity(setintent);
@@ -205,8 +214,9 @@ public class MainActivity extends AppCompatActivity {
         HeaderImageView = headerView.findViewById(R.id.headerImageView);
 
         userinfo = (User) getIntent().getSerializableExtra("data_user");
+        sp = getSharedPreferences("mimadate",MODE_PRIVATE);
         if(userinfo != null){
-            Glide.with(MainActivity.this).load(userinfo.getPhoto()).asBitmap().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+            Glide.with(MainActivity.this).load(sp.getString("imageString","")).asBitmap().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(new BitmapImageViewTarget(HeaderImageView) {
                         @Override
                         protected void setResource(Bitmap resource) {
@@ -271,4 +281,11 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (application != null) {
+            application.removeActivity(this);
+        }
+    }
 }

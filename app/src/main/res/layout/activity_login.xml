@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/img_touxian"
-                android:background="@drawable/hader_shape"
+                android:background="@drawable/face"
                 android:adjustViewBounds="true"
                 android:gravity="center"
                 android:layout_width="90dp"
@@ -130,6 +130,7 @@
             android:layout_height="30dp"
             >
             <CheckBox
+                android:layout_marginLeft="50dp"
                 android:id="@+id/login_mima"
                 android:layout_weight="1"
                 android:layout_width="0dp"

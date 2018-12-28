@@ -1,26 +1,13 @@
 package cdictv.news.Utils;
 
-import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cdictv.news.Activity.LoginActivity;
-import cdictv.news.Activity.RegisteredActivity;
-import cdictv.news.JavaBean.User;
-import okhttp3.Call;
-import okhttp3.Callback;
+import cdictv.news.Been.User;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

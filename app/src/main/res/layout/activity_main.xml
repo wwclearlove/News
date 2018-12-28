@@ -17,7 +17,7 @@
             android:id="@+id/mTooalbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#5fecfc"
+            android:background="#f9fbfb"
             android:fitsSystemWindows="true"
             android:minHeight="?attr/actionBarSize"
             app:popupTheme="@style/Widget.AppCompat.ActionBar"
@@ -35,9 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#fff"
-            app:tabIndicatorColor="@android:color/holo_blue_bright"
-            app:tabSelectedTextColor="@android:color/holo_blue_bright"
-
+            app:tabIndicatorColor="#FFFF2525"
+            app:tabSelectedTextColor="#ff2525"
             app:tabTextColor="#000">
 
         </android.support.design.widget.TabLayout>

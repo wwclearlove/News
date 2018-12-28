@@ -24,17 +24,17 @@ public class AboutWeActivity extends AppCompatActivity implements SwipeFlingAdap
         SwipeFlingAdapterView.OnItemClickListener, View.OnClickListener {
 
     int [] headerIcons = {
-            R.drawable.i1,
-            R.drawable.i2,
-            R.drawable.i3,
-            R.drawable.i4,
-            R.drawable.i5,
-            R.drawable.i6
+            R.drawable.wyc,
+            R.drawable.fcx,
+            R.drawable.yl,
+            R.drawable.yy,
+            R.drawable.ws,
+            R.drawable.www
     };
 
     String [] names = {"王永川","付成兴","易垒","尹杨","王帅","吴维维"};
     String [] years = {"后台",
-            "后台", "界面", "界面", "ui" ,"ui"};
+            "后台", "引导页", "注册", "登录" ,"ui设计+图标"};
 
 
 
@@ -244,7 +244,7 @@ public class AboutWeActivity extends AppCompatActivity implements SwipeFlingAdap
 //
             holder.workView.setHint(no);
             holder.workView.setText(talent.workYearName);
-            holder.workView.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.neirong,0,0);
+//            holder.workView.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.neirong,0,0);
 
 
             return convertView;

@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/icpion"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity"/>
+        <activity android:name=".Activity.MainActivity">
+
+
+    </activity>
+
         <activity android:name=".Activity.LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
