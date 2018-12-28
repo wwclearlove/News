@@ -1,5 +1,8 @@
 package cdictv.news.Utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -68,7 +71,7 @@ public class TestUtills {
      * @return
      */
     public static boolean IsUserId(String str){
-        String regex = "^[a-zA-Z]\\w{4,10}$";
+        String regex = "^[a-zA-Z]\\w{5,17}$";
         return match(regex,str);
     }
 
@@ -85,119 +88,50 @@ public class TestUtills {
     }
 
 
-
-//    public static boolean initCheckUser(String username, String pawone, String pawtwo, String phone, String checkcode, String yzm, Context context){
-//        if(username.isEmpty()){
-//            Toast.makeText(context, "用户名不能为空", Toast.LENGTH_SHORT).show();
-//        }else {
-//            if(pawone.isEmpty()|| pawtwo.isEmpty()){
-//                Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
-//            }else {
-//                if(phone.equals("")){
-//                    Toast.makeText(context, "手机号不能为空", Toast.LENGTH_SHORT).show();
-//                }else {
-//                    //通过嵌套判断 可以一次性对数据进行添加到数据库中 免去分部分添加
-//                    if (!TestUtills.IsUserId(username)) {
-//                        Toast.makeText(context, "用户名开头必须为字母", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        if (!TestUtills.IsHandset(phone)) {
-//                            Toast.makeText(context, "请输入正确的电话号码", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            if (!TestUtills.IsPassword(pawone)) {
-//                                Toast.makeText(context, "请输入6—11位密码", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                if (!pawone.equals(pawtwo)) {
-//                                    Toast.makeText(context, "密码两次输入不一致", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    //查询电话号码是否被注册
-//                                    List<UserInfo> infoList =  DataSupport.where("phone=?", phone).find(UserInfo.class);
-//                                    List<UserInfo> infoList_one =  DataSupport.where("name=?", username).find(UserInfo.class);
-//                                    UserInfo user = new UserInfo();
-//                                    Log.i("infoList", "registerInfo: "+infoList);
-//                                    //判断不为空 则被注册
-//                                    if(!infoList.isEmpty()){
-//                                        Toast.makeText(context, "电话号码已被注册", Toast.LENGTH_SHORT).show();
-//                                    }else {
-//                                        if(infoList_one.isEmpty()){
-//                                            if(checkcode.equals(yzm)){
-//                                                user.setName(username);
-//                                                user.setPassword(pawtwo);
-//                                                user.setPhone(phone);
-//                                                if(user.save()){
-//                                                    Toast.makeText(context, "注册成功！", Toast.LENGTH_SHORT).show();
-//                                                    return true;
-//                                                }else {
-//                                                    Toast.makeText(context, "注册失败！", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }else {
-//                                                Toast.makeText(context, "验证码错误", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }else {
-//                                            Toast.makeText(context, "用户名以存在", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
-    public static User iniUserInfo(User user){
-
-        User userinfo = null;
-
-        Gson gson = new Gson();
-        String userjson = gson.toJson(user);
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10,TimeUnit.SECONDS)
-                .readTimeout(10,TimeUnit.SECONDS)
-                .build();
-
-        RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"),userjson);
-
-        Request request = new Request.Builder()
-                .url("http://134.175.154.154/new/api/news/login")
-                .post(requestBody)
-                .build();
-
-        try {
-            Response response =okHttpClient.newCall(request).execute();
-            userinfo = gson.fromJson(response.body().string(),User.class);
-            //Log.i("iniUserInfo", "iniUserInfo: "+ response.body().string());
-            if(userinfo.getPassword() != null){
-                return  userinfo;
+    /**
+     * 判断是用户名规范
+     *
+     * @param username
+     * @param pawone
+     * @param pawtwo
+     * @param phone
+     * @param context
+     * @return
+     */
+    public static boolean initCheckUser(String username, String pawone, String pawtwo, String phone,Context context){
+        if(username.isEmpty()){
+            Toast.makeText(context, "用户名不能为空", Toast.LENGTH_SHORT).show();
+        }else {
+            if(pawone.isEmpty()|| pawtwo.isEmpty()){
+                Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
+            }else {
+                if(phone.equals("")){
+                    Toast.makeText(context, "手机号不能为空", Toast.LENGTH_SHORT).show();
+                }else {
+                    //通过嵌套判断 可以一次性对数据进行添加到数据库中 免去分部分添加
+                    if (!TestUtills.IsUserId(username)) {
+                        Toast.makeText(context, "用户名开头必须为字母", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (!TestUtills.IsHandset(phone)) {
+                            Toast.makeText(context, "请输入正确的电话号码", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (!TestUtills.IsPassword(pawone)) {
+                                Toast.makeText(context, "请输入6—11位密码", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (!pawone.equals(pawtwo)) {
+                                    Toast.makeText(context, "密码两次输入不一致", Toast.LENGTH_SHORT).show();
+                                } else {
+                                   return true;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            return userinfo;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return  userinfo;
         }
-
-
-//        Call call = okHttpClient.newCall(request);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                Gson gson = new Gson();
-//                userinfo[0] = gson.fromJson(response.body().string(), User.class);
-//                Log.i("jsondate" , "onResponse: "+userinfo[0]);
-//            }
-//        });
-//        Log.i("jsonuser" , "onResponse: "+userinfo[0]);
-//       return userinfo[0];
-
+        return false;
     }
+
 
     /**
      * 用于注册数据
