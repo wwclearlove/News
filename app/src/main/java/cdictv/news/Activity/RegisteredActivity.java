@@ -411,7 +411,7 @@ public class RegisteredActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     PhotoUtils.openPic(this, CODE_GALLERY_REQUEST);
                 } else {
-                    Toast.makeText(this, "请允许打操作SDCard！！", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "请允许打操作SDCard！！", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
